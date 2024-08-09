@@ -1,46 +1,41 @@
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Home from "./screens/Home";
-import AddProduct from "./screens/AddProduct";
-import Product from "./screens/Product";
-import Account from "./screens/Account";
-import Login from "./components/Login";
-import Register from "./components/Register"
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
-import ResetPassword from "./components/ResetPassword";
-import ForgotPassword from "./components/ForgotPassword";
+import { lazy, Suspense } from "react";
+import { AuthProvider } from "./context/AuthContext";
+
+// Lazy load all components
+const Home = lazy(() => import('./screens/Home'));
+const AddProduct = lazy(() => import('./screens/AddProduct'));
+const Product = lazy(() => import('./screens/Product'));
+const Account = lazy(() => import('./screens/Account'));
+const Login = lazy(() => import('./components/Login'));
+const Register = lazy(() => import('./components/Register'));
+const Navbar = lazy(() => import('./components/Navbar'));
+const Footer = lazy(() => import('./components/Footer'));
+const ResetPassword = lazy(() => import('./components/ResetPassword'));
+const ForgotPassword = lazy(() => import('./components/ForgotPassword'));
+const ProtectedRoute = lazy(() => import('./components/ProtectedRoute'));
 
 function App() {
-
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          {/* <Route path="/" element={<ProtectedRoute> element={<Home />}</ProtectedRoute>}></Route> */}
-          <Route path="/addproduct" element={<ProtectedRoute> element={<AddProduct />} </ProtectedRoute>}></Route>
-
-          <Route path="/forgot-password" element={<ForgotPassword />}></Route>
-
-          <Route path="/reset-password" element={<ResetPassword />}></Route>
-
-
-
-          <Route
-            path="/products"
-            element={<ProtectedRoute> element={<Product />} </ProtectedRoute>}
-          ></Route>
-          <Route path="/account" element={<Account />}>
-            <Route path="login" element={<Login />}></Route>
-            <Route path="register" element={<Register />}></Route>
-          </Route>
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-        <Footer />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/addproduct" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/products" element={<ProtectedRoute><Product /></ProtectedRoute>} />
+            <Route path="/account" element={<Account />}>
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+          <Footer />
+        </Suspense>
       </AuthProvider>
     </BrowserRouter>
   );
