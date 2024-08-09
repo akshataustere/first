@@ -5,7 +5,7 @@ import AddProduct from "./screens/AddProduct";
 import Product from "./screens/Product";
 import Account from "./screens/Account";
 import Login from "./components/Login";
-import Register from "./components/Register";
+import Register from "./components/Register"
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { AuthProvider, useAuth } from "./context/AuthContext";
